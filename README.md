@@ -4,7 +4,6 @@ Escolhi a **Anamnai** como empresa pra abordar na ponderada, uma aplicação que
 
 Como o front-end mobile consome essas APIs em tempo real durante a consulta, a arquitetura do backend precisa ser bem resiliente. Abaixo, está a forma como aplicamos os padrões de integração vistos em aula para suportar essa operação.
 
----
 
 ### **1) Documentar os requisitos em código**
 
