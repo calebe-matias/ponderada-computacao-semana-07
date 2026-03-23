@@ -2,7 +2,7 @@
 
 Escolhi a Anamnai como empresa pra abordar na ponderada, uma aplicação que desenvolvi com meu sócio da Medicina da USP, que é um software que transcreve automaticamente consultas médicas e gera documentos estruturados para profissionais de saúde, com estilo e formatação adequada a cada especialidade e padrão próprio de cada médico
 
-Como o front-end mobile consome essas APIs em tempo real durante a consulta, a arquitetura do backend precisa ser bem resiliente. Abaixo, está a forma como aplicamos os padrões de integração vistos em aula para suportar essa operação.
+Como o front-end mobile consome essas APIs em tempo real durante a consulta, a arquitetura do backend precisa ser bem resiliente. Abaixo, está a forma como poderíamos ter aplicado os padrões de integração vistos em aula pra suportar essa operação.
 
 
 ### **1) Documentar os requisitos em código**
@@ -11,7 +11,7 @@ Como o front-end mobile consome essas APIs em tempo real durante a consulta, a a
 
 O sistema deve receber o pacote de áudio da consulta médica e integrá-lo com um serviço de terceiros (API de Transcrição) para devolver o texto estruturado ao prontuário do paciente.
 
-Pra implementar isso de forma segura e não travar o aplicativo se a IA externa demorar a responder, o padrão Circuit Breaker com um *fallback* poderia ser implementado como uma fila de contingência (padrão *Message Channel*), exatamente como estudamos no caso da SEFAZ que vimos na aula.
+Pra implementar isso de forma segura e não travar o aplicativo se a IA externa demorar a responder, o padrão Circuit Breaker com um *fallback* poderia ser implementado como uma fila de contingência (padrão *Message Channel*), parecido com o que vimos no caso da SEFAZ que vimos na aula.
 Abaixo está a forma que esse padrão poderia ser implementado:
 
 ```python
