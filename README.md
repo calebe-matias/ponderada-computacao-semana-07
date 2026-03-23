@@ -1,6 +1,6 @@
 # Ponderada de Computação - Semana 07
 
-Escolhi a **Anamnai** como empresa pra abordar na ponderada, uma aplicação que desenvolvi com meu sócio da Medicina da USP. Nosso produto é um software que transcreve automaticamente consultas médicas e gera documentos estruturados para profissionais de saúde.
+Escolhi a Anamnai como empresa pra abordar na ponderada, uma aplicação que desenvolvi com meu sócio da Medicina da USP, que é um software que transcreve automaticamente consultas médicas e gera documentos estruturados para profissionais de saúde, com estilo e formatação adequada a cada especialidade e padrão próprio de cada médico
 
 Como o front-end mobile consome essas APIs em tempo real durante a consulta, a arquitetura do backend precisa ser bem resiliente. Abaixo, está a forma como aplicamos os padrões de integração vistos em aula para suportar essa operação.
 
@@ -8,9 +8,10 @@ Como o front-end mobile consome essas APIs em tempo real durante a consulta, a a
 ### **1) Documentar os requisitos em código**
 
 **Requisito Funcional (RF01): Processamento e Transcrição de Áudio**
+
 O sistema deve receber o pacote de áudio da consulta médica e integrá-lo com um serviço de terceiros (API de Transcrição) para devolver o texto estruturado ao prontuário do paciente.
 
-Pra implementar isso de forma segura e não travar o aplicativo se a IA externa demorar a responder, o padrão **Circuit Breaker** com um *fallback* poderia ser implementado como uma fila de contingência (padrão *Message Channel*), exatamente como estudamos no caso da SEFAZ que vimos na aula.
+Pra implementar isso de forma segura e não travar o aplicativo se a IA externa demorar a responder, o padrão Circuit Breaker com um *fallback* poderia ser implementado como uma fila de contingência (padrão *Message Channel*), exatamente como estudamos no caso da SEFAZ que vimos na aula.
 Abaixo está a forma que esse padrão poderia ser implementado:
 
 ```python
@@ -43,6 +44,7 @@ def transcrever_consulta(dados_audio):
 ### **2) Aferir a qualidade dos requisitos envolvidos no sistema**
 
 **Requisito Não Funcional (RNF01): Resiliência e Tolerância a Falhas**
+
 O sistema não pode perder os dados da consulta médica caso a API de IA caia ou sofra degradação de performance. A qualidade desse RNF é aferida através de testes BDD (Behavior-Driven Development), simulando a falha do serviço externo e garantindo que o roteamento de mensagens assuma o controle.
 
 Abaixo está o código que poderiamos ter usado pra testar e validar o comportamento do sistema quando um problema ocorre:
@@ -79,4 +81,4 @@ def step_fila_contingencia(context):
     print("Sucesso: Nenhuma consulta foi perdida, dados salvos na fila!")
 ```
 
-**Explicação da Aferição:** Ao rodar estes códigos de teste, temos uma garantia de que a arquitetura cumpre o requisito de **Disponibilidade**. Se o provedor de IA sair do ar, o *Circuit Breaker* isola a falha, evitando o esgotamento dos recursos do nosso backend, e o *Message Channel* (Fila) garante que o documento estruturado do médico será gerado assim que o sistema normalizar.
+**Explicação da Aferição:** Ao rodar estes códigos de teste, temos uma garantia de que a arquitetura cumpre o requisito de Disponibilidade. Se o provedor de IA sair do ar, o *Circuit Breaker* isola a falha, evitando o esgotamento dos recursos do nosso backend, e o *Message Channel* (Fila) garante que o documento estruturado do médico será gerado assim que o sistema normalizar.
